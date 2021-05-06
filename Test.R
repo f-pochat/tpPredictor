@@ -7,8 +7,7 @@ library(dplyr)
 print("Hello world xd")
 print("hello xdxdxdxd")
 
-library(readxl)
-dataset <- read_excel("dataset.xlsx")
+dataset <- read.csv("dataset.csv", sep=",")
 View(dataset)
 
 angioplastia <- dataset[which(dataset$PROCEDIMIENTO == "ANGIOPLASTIA"),]
