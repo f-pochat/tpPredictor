@@ -1,0 +1,50 @@
+---
+title: "First Report"
+author: "Grupo 6"
+date: "6/5/2021"
+output: html_document
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
+library(ggplot2)
+library(plotrix)
+library(dplyr)
+
+library(readxl)
+dataset <- read_excel("dataset.xlsx")
+
+angioplastia <- dataset[which(dataset$PROCEDIMIENTO == "ANGIOPLASTIA"),]
+cirugia <- dataset[which(dataset$PROCEDIMIENTO == "CIRUGIA"),]
+endovalvula <- dataset[which(dataset$PROCEDIMIENTO == "ENDOVALVULA"),]
+
+```
+
+## ig del pibito? {.tabset .tabset-fade .tabset-pills .unnumbered}
+
+### Hola soy nacho {- .unnumbered}
+![Un Super Nacho!](xd.jpg)
+
+### Nacho again {- .unnumbered}
+![Falta flow...](xd2.jpg)
+
+## {.unnumbered}
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
+plot(factor(cirugia$EDAD),type = "h")
+
+cirugia %>%
+  ggplot( aes(x=EDAD))+
+  geom_density(fill="#b3ffb3", color="#66ff66", alpha=0.8)
+
+angioplastia %>%
+  ggplot( aes(x=EDAD))+
+  geom_density(fill="#b3ffb3", color="#66ff66", alpha=0.8)
+
+endovalvula %>%
+  ggplot( aes(x=EDAD))+
+  geom_density(fill="#b3ffb3", color="#66ff66", alpha=0.8)
+
+
+```
