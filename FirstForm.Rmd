@@ -20,6 +20,14 @@ endovalvula <- dataset[which(dataset$PROCEDIMIENTO == "ENDOVALVULA"),]
 
 ```
 
+# Los pibardos
+
+* Fede
+* Mateo
+* Segun
+* Nacho
+* Nacho again
+
 ## ig del pibito? {.tabset .tabset-fade .tabset-pills .unnumbered}
 
 ### Hola soy nacho {- .unnumbered}
@@ -29,6 +37,8 @@ endovalvula <- dataset[which(dataset$PROCEDIMIENTO == "ENDOVALVULA"),]
 ![Falta flow...](xd2.jpg)
 
 ## {.unnumbered}
+
+# Um pequeno graffiti sem sentido para as crianças facheras
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 
