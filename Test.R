@@ -5,8 +5,7 @@ library(ggplot2)
 library(plotrix)
 library(dplyr)
 
-library(readxl)
-dataset <- read_excel("dataset.xlsx")
+dataset <- read.csv("dataset.csv", sep=",")
 View(dataset)
 
 angioplastia <- dataset[which(dataset$PROCEDIMIENTO == "ANGIOPLASTIA"),]
