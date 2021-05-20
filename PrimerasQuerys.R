@@ -1,5 +1,10 @@
 dataset <- read.csv("dataset.csv", sep=",")
-
+library(ggplot2)
+library(plotrix)
+library(hrbrthemes)
+library(dplyr)
+library(tidyr)
+library(viridis)
 ## Analizar y contar datos
 
 #Promedio de edad para epoc obesidad diabetes y diálisis
@@ -19,15 +24,35 @@ dialisis <- dataset[which(dataset$DIALISIS == 1),]
 ageAverageWithDialisis <- mean(dialisis$EDAD)
 ageAverageWithDialisis
 
+age <- c(ageAverageWithDiabetes,ageAverageWithDialisis,ageAverageWithEpoc,ageAverageWithObesity)
+barplot(age, ylab="Average Age", col = rainbow(4))
+
 #Porcentaje de Hombres y Mujeres y promedio de edad para cada una
 numOfMale <- length(dataset$SEXO[which(dataset$SEXO == "MASC")])
 numOfFemale <- length(dataset$SEXO[which(dataset$SEXO == "FEME")])
 totalNum <- numOfFemale + numOfMale
 percentageOfMale <- round(numOfMale / totalNum * 100, 2)
 percentageOfFemale <- round(numOfFemale / totalNum * 100, 2)
+percentages <- c(percentageOfFemale,percentageOfMale)
+
+#Pie
+pie3D(percentages,main = "Porcentaje de Hombres y Mujeres", labels = c(paste("Mujeres", percentageOfFemale,"%"), paste("Hombres", percentageOfMale,"%")), theta = 1, explode = 0.05)
+
 
 ageAverageInMen <- mean(dataset[which(dataset$SEXO == "MASC"),]$EDAD)
 ageAverageInWomen <- mean(dataset[which(dataset$SEXO == "FEME"),]$EDAD)
+
+ages <- c(dataset[which(dataset$SEXO == "MASC"),]$EDAD,dataset[which(dataset$SEXO == "FEME"),]$EDAD)
+
+#Histograma
+ggplot(dataset, aes(x = EDAD, fill = SEXO)) +
+  geom_density(alpha = 0.4) +
+  scale_fill_discrete(name = "Gender", labels = c("Female","Male")) +
+  theme(legend.position = "top")+
+  geom_vline(data=dataset, aes(xintercept=ageAverageInMen, color = "Hombres"),
+               linetype="dashed")+
+  geom_vline(data=dataset, aes(xintercept=ageAverageInWomen, color = "Mujeres"),
+             linetype="dashed")
 
 #Porcentaje de personas que van a angioplastia, cirugia o endovalvula
 
@@ -39,6 +64,9 @@ percentageSurgery <- percentageByProcedure[2] + percentageSerguryAndEndovalve
 porcentageAngioplasty
 percentageEndovalve
 percentageSurgery
+#Pie
+percentagesSurgeries <- c(porcentageAngioplasty,percentageSurgery,1-porcentageAngioplasty-percentageSurgery)
+pie3D(percentagesSurgeries)
 
 ## Cruzar variabeles
 
@@ -54,6 +82,8 @@ injuryAverageWithDialisis
 
 injuryAverageWithDiabetes <- mean(na.omit(as.numeric(diabetes$NUMERO.DE.LESIONES)))
 injuryAverageWithDiabetes
+
+#Barplot
 
 #Porcentaje de pacientes masculinos y femeninos con con epoc, obesidad mórbida, diálisis o diabetes
 
@@ -86,6 +116,7 @@ percentageOfWomenWithDialisis
 
 percentageOfWomenWithDiabetes <- prop.table(table(femaleData$DIABETES), NULL)*100
 percentageOfWomenWithDiabetes
+#Todos pie charts
 
 #Promedio de edad para cada procedimiento
 surgery <- dataset[which(dataset$PROCEDIMIENTO == 'CIRUGIA'),]
@@ -93,6 +124,8 @@ ageAverageInSurgery <- mean(surgery$EDAD)
 
 angioplasty <- dataset[which(dataset$PROCEDIMIENTO == 'ANGIOPLASTIA'),]
 ageAverageInAngioplasty <- mean(angioplasty$EDAD)
+
+#Barplot
 
 ## gooood cruzando variables
 
@@ -121,6 +154,7 @@ dialisisAndAngioplasty <- dialisis[which(dialisis$PROCEDIMIENTO == 'ANGIOPLASTIA
 
 percentageOfSurgeryInDialisis <- nrow(dialisisAndSurgery) / nrow(dialisis)
 percentageOfAngioplastyInDialisis <- nrow(dialisisAndAngioplasty) / nrow(dialisis)
+#PieCharts
 
 #promedio de complicaciones inmediatas y tardias con respecto a cada procedimiento
 
