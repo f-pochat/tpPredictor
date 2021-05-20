@@ -25,7 +25,7 @@ ageAverageWithDialisis <- mean(dialisis$EDAD)
 ageAverageWithDialisis
 
 age <- c(ageAverageWithDiabetes,ageAverageWithDialisis,ageAverageWithEpoc,ageAverageWithObesity)
-barplot(age, ylab="Average Age", col = rainbow(4))
+barplot(age, ylab="Average Age", col = rainbow(4)) #No aporta mucha informacion
 
 #Porcentaje de Hombres y Mujeres y promedio de edad para cada una
 numOfMale <- length(dataset$SEXO[which(dataset$SEXO == "MASC")])
@@ -36,7 +36,7 @@ percentageOfFemale <- round(numOfFemale / totalNum * 100, 2)
 percentages <- c(percentageOfFemale,percentageOfMale)
 
 #Pie
-pie3D(percentages,main = "Porcentaje de Hombres y Mujeres", labels = c(paste("Mujeres", percentageOfFemale,"%"), paste("Hombres", percentageOfMale,"%")), theta = 1, explode = 0.05)
+pie3D(percentages,main = "Porcentaje de Hombres y Mujeres", labels = c(paste("Mujeres", percentageOfFemale,"%"), paste("Hombres", percentageOfMale,"%")), theta = 1, explode = 0.00)
 
 
 ageAverageInMen <- mean(dataset[which(dataset$SEXO == "MASC"),]$EDAD)
@@ -57,16 +57,16 @@ ggplot(dataset, aes(x = EDAD, fill = SEXO)) +
 #Porcentaje de personas que van a angioplastia, cirugia o endovalvula
 
 percentageByProcedure <- prop.table(table(dataset$PROCEDIMIENTO), NULL)*100
-porcentageAngioplasty <- percentageByProcedure[1]
+percentageAngioplasty <- percentageByProcedure[1]
 percentageSerguryAndEndovalve <- percentageByProcedure[3]
 percentageEndovalve <- percentageByProcedure[4] + percentageSerguryAndEndovalve
 percentageSurgery <- percentageByProcedure[2] + percentageSerguryAndEndovalve
-porcentageAngioplasty
-percentageEndovalve
-percentageSurgery
-#Pie
-percentagesSurgeries <- c(porcentageAngioplasty,percentageSurgery,1-porcentageAngioplasty-percentageSurgery)
-pie3D(percentagesSurgeries)
+percentageAngioplasty <- round(percentageAngioplasty, digits = 1)
+percentageEndovalve <- round(percentageEndovalve, digits = 1)
+percentageSurgery <- round(percentageSurgery, digits = 1)
+#Pie (DA MAS DE CIEN)
+percentagesSurgeries <- c(percentageAngioplasty,percentageSurgery,percentageEndovalve)
+pie3D(percentagesSurgeries, main = "Porcentaje por procedimiento", labels = c(paste("Angioplastia", percentageAngioplasty,"%"), paste("Cirugía", percentageSurgery,"%"), paste("Endovalvula", percentageEndovalve, "%")), theta = 1, explode = 0.00)
 
 ## Cruzar variabeles
 
@@ -84,6 +84,7 @@ injuryAverageWithDiabetes <- mean(na.omit(as.numeric(diabetes$NUMERO.DE.LESIONES
 injuryAverageWithDiabetes
 
 #Barplot
+barplot(age, ylab="Average Age", col = rainbow(4)) #No aporta mucha informacion
 
 #Porcentaje de pacientes masculinos y femeninos con con epoc, obesidad mórbida, diálisis o diabetes
 
