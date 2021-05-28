@@ -25,6 +25,8 @@ dialisis <- dataset[which(dataset$DIALISIS == 1),]
 ageAverageWithDialisis <- mean(dialisis$EDAD)
 ageAverageWithDialisis <- round(ageAverageWithDialisis, 1)
 
+#cambiar a grafico de densidad cuadruple
+
 age <- c(ageAverageWithDiabetes,ageAverageWithDialisis,ageAverageWithEpoc,ageAverageWithObesity)
 p <- barplot(age, ylab="Average Age", names=c("Diabetes", "Dialisis", "Epoc", "Obesidad"), col = rainbow(4), ylim = c(0, 70)) #No aporta mucha informacion
 text(p, labels=round(age, 1), y=age+3)
@@ -67,6 +69,7 @@ percentageAngioplasty <- round(percentageAngioplasty, digits = 1)
 percentageEndovalve <- round(percentageEndovalve, digits = 1)
 percentageSurgery <- round(percentageSurgery, digits = 1)
 #Pie 
+#Descartrar los que estan doble y hacer un solo pie
 percentageAngioplastyArray <- c(percentageAngioplasty[1],100-percentageAngioplasty[1])
 pie3D(percentageAngioplastyArray, main = "Porcentaje angioplastia",
       labels = c(paste("Angioplastia", percentageAngioplastyArray[1],"%"), paste("No angioplastia", percentageAngioplastyArray[2],"%")),
@@ -89,6 +92,7 @@ pie3D(percentageSurgeryArray, main = "Porcentaje cirugia",
 ## Cruzar variabeles
 
 #4 Promedio de lesiones con respecto a pacientes con epoc, obesidad mórbida, diálisis o diabetes
+#cambiar a grafico de densidad
 injuryAverageWithEpoc <- mean(as.numeric(epoc$NUMERO.DE.LESIONES))
 injuryAverageWithEpoc
 
@@ -105,6 +109,7 @@ injuryAverageWithDiabetes
 barplot(age, ylab="Average Age", col = rainbow(4)) #No aporta mucha informacion
 
 #5 Porcentaje de pacientes masculinos y femeninos con con epoc, obesidad mórbida, diálisis o diabetes
+#cambiar a diagrama de venn, uno masculino y otro femenino
 
 #Masculino
 menData <- dataset[which(dataset$SEXO == 'MASC'),]
@@ -204,6 +209,7 @@ pie3D(menWithDiabetes, main = "Porcentajes de Hombres con Diabetes",
       explode = 0.00)
 
 #6 Promedio de edad para cada procedimiento
+#cambiar a densidad
 surgery <- dataset[which(dataset$PROCEDIMIENTO == 'CIRUGIA'),]
 ageAverageInSurgery <- mean(surgery$EDAD)
 
@@ -218,6 +224,7 @@ text(barplot6, labels=age2, y=age2+3)
 ## gooood cruzando variables
 
 #7 Porcentaje de riesgo y no de riesgo por procedimiento (sin endovalvula)
+# hacer el barplot doble solo con cirugia y angioplastia
 
 diabetesAndSurgery <- diabetes[which(diabetes$PROCEDIMIENTO == 'CIRUGIA'),]
 diabetesAndAngioplasty <- diabetes[which(diabetes$PROCEDIMIENTO == 'ANGIOPLASTIA'),]
@@ -304,6 +311,7 @@ pie3D(percentagesSurgeriesInDialisis, main = "Porcentaje de Angioplastias en Dia
       explode = 0.00)
 
 #8 promedio de complicaciones inmediatas y tardias con respecto a cada procedimiento
+#cambiar a un solo pie chart solo con los que tuvieron complicaciones  
 
 #En angioplastia usamos complicaciones angiplastia pq ninguno tenia complicaciones inmediata
 percentageOfImmediateComplicationsAngioplasty <- prop.table(table(angioplasty$COMPLICACIONES.ANGIOPLASTIA), NULL)*100
