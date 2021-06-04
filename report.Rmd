@@ -4,4 +4,42 @@ author: "Grupo6"
 date: "6/3/2021"
 output: rmdformats::material
 ---
+# Introduction
+For the making of this report, it was given a dataset with data of pacients of the Hospital Austral who had suffered from heart diseases and where treated there with a surgery or an angioplasty. So, the goal of this report is trying to predict the neccesary intervention a future pacient may need.
 
+```{r,echo=FALSE,message=FALSE}
+dataset <- read.csv("dataset.csv", sep=",")
+library(ggplot2)
+library(plotrix)
+library(hrbrthemes)
+library(dplyr)
+library(tidyr)
+```
+
+# Analysis
+In this section, we are going to analyze the different factors and variables that may be used to take into account in the predictor
+
+## Gender
+Gender
+```{r,echo=FALSE,message=FALSE}
+numOfMale <- length(dataset$SEXO[which(dataset$SEXO == "MASC")])
+numOfFemale <- length(dataset$SEXO[which(dataset$SEXO == "FEME")])
+totalNum <- numOfFemale + numOfMale
+percentageOfMale <- round(numOfMale / totalNum * 100, 2)
+percentageOfFemale <- round(numOfFemale / totalNum * 100, 2)
+percentages <- c(percentageOfFemale,percentageOfMale)
+
+#Pie
+pie3D(percentages,main = "Porcentaje de Hombres y Mujeres", labels = c(paste("Mujeres", percentageOfFemale,"%"), paste("Hombres", percentageOfMale,"%")), theta = 1, explode = 0.00)
+
+
+ageAverageInMen <- mean(dataset[which(dataset$SEXO == "MASC"),]$EDAD)
+ageAverageInWomen <- mean(dataset[which(dataset$SEXO == "FEME"),]$EDAD)
+
+ages <- c(dataset[which(dataset$SEXO == "MASC"),]$EDAD,dataset[which(dataset$SEXO == "FEME"),]$EDAD)
+
+
+```
+
+# Interpretation
+We interpretate the graphs and put more y data ...
