@@ -111,6 +111,37 @@ pie3D(percentageByProcedureArray, main = "Percentage by procedure",
 
 ## 6.
 ```{r,echo = FALSE, message = FALSE, warning = FALSE}
+surgery <- dataset[which(dataset$PROCEDIMIENTO == 'CIRUGIA'),]
+ageAverageInSurgery <- mean(surgery$EDAD)
+
+angioplasty <- dataset[which(dataset$PROCEDIMIENTO == 'ANGIOPLASTIA'),]
+ageAverageInAngioplasty <- mean(angioplasty$EDAD)
+
+age2 <- c(round(ageAverageInSurgery,1), round(ageAverageInAngioplasty, 1))
+
+#Doble barplot
+a <- length(dataset$EDAD[which(dataset$EDAD < 40 & dataset$PROCEDIMIENTO == "ANGIOPLASTIA")])
+b <-length(dataset$EDAD[which(dataset$EDAD < 40 & dataset$PROCEDIMIENTO == "CIRUGIA")])
+c <-length(dataset$EDAD[which(dataset$EDAD >= 40  & dataset$EDAD < 50 & dataset$PROCEDIMIENTO == "ANGIOPLASTIA")])
+d <-length(dataset$EDAD[which(dataset$EDAD >= 40  & dataset$EDAD < 50 & dataset$PROCEDIMIENTO == "CIRUGIA")])
+e <-length(dataset$EDAD[which(dataset$EDAD >= 50  & dataset$EDAD < 60 & dataset$PROCEDIMIENTO == "ANGIOPLASTIA")])
+f <-length(dataset$EDAD[which(dataset$EDAD >= 50  & dataset$EDAD < 60 & dataset$PROCEDIMIENTO == "CIRUGIA")])
+g <-length(dataset$EDAD[which(dataset$EDAD >= 60  & dataset$EDAD < 70 & dataset$PROCEDIMIENTO == "ANGIOPLASTIA")])
+h <-length(dataset$EDAD[which(dataset$EDAD >= 60  & dataset$EDAD < 70 & dataset$PROCEDIMIENTO == "CIRUGIA")])
+i <-length(dataset$EDAD[which(dataset$EDAD >= 70  & dataset$EDAD < 80 & dataset$PROCEDIMIENTO == "ANGIOPLASTIA")])
+j <-length(dataset$EDAD[which(dataset$EDAD >= 70  & dataset$EDAD < 80 & dataset$PROCEDIMIENTO == "CIRUGIA")])
+k <-length(dataset$EDAD[which(dataset$EDAD >= 80 & dataset$PROCEDIMIENTO == "ANGIOPLASTIA")])
+l <-length(dataset$EDAD[which(dataset$EDAD >= 80 & dataset$PROCEDIMIENTO == "CIRUGIA")])
+# Grouped
+PROCEDURES <- c("ANGIOPLASTY", "SURGERY")
+AMOUNT <- c(a,b,c,d,e,f,g,h,i,j,k,l)
+AGES <- c(rep("<40",2), rep("40-49",2), rep("50-59",2), rep("60-69",2), rep("70-79",2), rep("80+",2))
+data <- data.frame(AGES, PROCEDURES, AMOUNT)
+
+ggplot(data, aes(fill=PROCEDURES, y=AMOUNT, x=AGES)) + 
+  geom_bar(position="dodge", stat="identity") +
+  scale_fill_brewer(palette = "BuGn", type = "div", direction = -1) +
+  theme_bw()
 
 ```
 
