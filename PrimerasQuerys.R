@@ -6,6 +6,9 @@ library(dplyr)
 library(tidyr)
 library(viridis)
 library(tibble)
+library(VennDiagram)
+library(RColorBrewer)
+library("ggVennDiagram")
 ## Analizar y contar datos
 
 #1 Promedio de edad para epoc obesidad diabetes y diálisis
@@ -132,6 +135,82 @@ percentageOfWomenWithDialisis <- round(percentageOfWomenWithDialisis,1)
 percentageOfWomenWithDiabetes <- prop.table(table(femaleData$DIABETES), NULL)*100
 percentageOfWomenWithDiabetes <- round(percentageOfWomenWithDiabetes,1)
 
+#Venn
+
+myCol <- brewer.pal(3, "Paired")
+
+# Chart
+venn.diagram(
+  x = list(
+    DIABETES = dataset$ï..[which(dataset$DIABETES == 1 & dataset$SEXO == "MASC")],
+    OBESITY = dataset$ï..[which(dataset$OBESIDAD.MORBIDA == 1 & dataset$SEXO == "MASC")],
+    EPOC = dataset$ï..[which(dataset$EPOC == 1 & dataset$SEXO == "MASC")]),
+  category.names = c("DIABETES" , "OBESITY" , "EPOC"),
+  filename = 'venn_diagramm.png',
+  output=TRUE,
+  
+  # Output features
+  imagetype="png" ,
+  height = 480 , 
+  width = 480 , 
+  resolution = 300,
+  compression = "lzw",
+  
+  # Circles
+  lwd = 2,
+  lty = 'blank',
+  fill = myCol,
+  
+  # Numbers
+  cex = .6,
+  fontface = "bold",
+  fontfamily = "sans",
+  
+  # Set names
+  cat.cex = 0.6,
+  cat.fontface = "bold",
+  cat.default.pos = "outer",
+  cat.pos = c(-27, 27, 135),
+  cat.dist = c(0.055, 0.055, 0.085),
+  cat.fontfamily = "sans",
+  rotation = 1
+)
+
+venn.diagram(
+  x = list(
+    DIABETES = dataset$ï..[which(dataset$DIABETES == 1 & dataset$SEXO == "FEME")],
+    OBESITY = dataset$ï..[which(dataset$OBESIDAD.MORBIDA == 1 & dataset$SEXO == "FEME")],
+    EPOC = dataset$ï..[which(dataset$EPOC == 1 & dataset$SEXO == "FEME")]),
+  category.names = c("DIABETES" , "OBESITY" , "EPOC"),
+  filename = 'venn_diagramm2.png',
+  output=TRUE,
+  
+  # Output features
+  imagetype="png" ,
+  height = 480 , 
+  width = 480 , 
+  resolution = 300,
+  compression = "lzw",
+  
+  # Circles
+  lwd = 2,
+  lty = 'blank',
+  fill = myCol,
+  
+  # Numbers
+  cex = .6,
+  fontface = "bold",
+  fontfamily = "sans",
+  
+  # Set names
+  cat.cex = 0.6,
+  cat.fontface = "bold",
+  cat.default.pos = "outer",
+  cat.pos = c(-27, 27, 135),
+  cat.dist = c(0.055, 0.055, 0.085),
+  cat.fontfamily = "sans",
+  rotation = 1
+)
 #Todos pie charts
 
 porcentageOfWomenWithNotEpoc <- 100-percentageOfWomenWithEpoc[1]

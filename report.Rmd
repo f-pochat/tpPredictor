@@ -104,7 +104,13 @@ pie3D(percentageByProcedureArray, main = "Percentage by procedure",
 
 ```
 
-## 5.
+## 5. {.tabset .unnumbered}
+
+### Male {- .unnumbered}
+![](./venn_diagramm.png)
+
+### Female {- .unnumbered}
+![](./venn_diagramm2.png)
 ```{r,echo = FALSE, message = FALSE, warning = FALSE}
 
 ```
