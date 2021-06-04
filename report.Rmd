@@ -11,7 +11,7 @@ For the making of this report, it was given a dataset with data of pacients of t
 dataset <- read.csv("dataset.csv", sep=",")
 library(ggplot2)
 library(plotrix)
-library(hrbrthemes)
+#library(hrbrthemes)
 library(dplyr)
 library(tidyr)
 ```
@@ -43,7 +43,7 @@ riskFactors <- riskFactors[,c(2,17:20)]
 riskFactors$EPOC <- factor(riskFactors$EPOC, levels = c(0,1), labels = c(0, "EPOC"))
 riskFactors$DIABETES <- factor(riskFactors$DIABETES, levels = c(0,1), labels = c(0, "DIABETES"))
 riskFactors$DIALISIS <- factor(riskFactors$DIALISIS, levels = c(0,1), labels = c(0, "DIALISIS"))
-riskFactors$OBESIDAD.MORBIDA <- factor(riskFactors$OBESIDAD.MORBIDA, levels = c(0,1), labels = c(0, "OBESIDAD.MORBIDA"))
+riskFactors$OBESIDAD.MORBIDA <- factor(riskFactors$OBESIDAD.MORBIDA, levels = c(0,1), labels = c(0, "MORBID OBESITY"))
 riskFactors <- na_if(riskFactors,0)
 riskFactors <- mutate(riskFactors, factors = paste(riskFactors$EPOC,riskFactors$DIABETES,riskFactors$DIALISIS,riskFactors$OBESIDAD.MORBIDA, sep = " & "))
 riskFactors$factors <- gsub(" & NA" , "",riskFactors$factors)
@@ -67,7 +67,7 @@ percentageOfFemale <- round(numOfFemale / totalNum * 100, 2)
 percentages <- c(percentageOfFemale,percentageOfMale)
 
 #Pie
-pie3D(percentages,main = "Porcentaje de Hombres y Mujeres", labels = c(paste("Mujeres", percentageOfFemale,"%"), paste("Hombres", percentageOfMale,"%")), theta = 1, explode = 0.00)
+pie3D(percentages,main = "Men and women percentage", labels = c(paste("Women", percentageOfFemale,"%"), paste("Men", percentageOfMale,"%")), theta = 1, explode = 0.00)
 
 
 ageAverageInMen <- mean(dataset[which(dataset$SEXO == "MASC"),]$EDAD)
@@ -80,9 +80,9 @@ ggplot(dataset, aes(x = EDAD, fill = SEXO)) +
   geom_density(alpha = 0.4) +
   scale_fill_discrete(name = "Gender", labels = c("Female","Male")) +
   theme(legend.position = "top")+
-  geom_vline(data=dataset, aes(xintercept=ageAverageInMen, color = "Hombres"),
+  geom_vline(data=dataset, aes(xintercept=ageAverageInMen, color = "Men"),
                linetype="dashed")+
-  geom_vline(data=dataset, aes(xintercept=ageAverageInWomen, color = "Mujeres"),
+  geom_vline(data=dataset, aes(xintercept=ageAverageInWomen, color = "Women"),
              linetype="dashed")
 
 ```
@@ -93,7 +93,7 @@ peopleByProcedure <- dataset[which(dataset$PROCEDIMIENTO != "CIRUGIA, ENDOVALVUL
 percentageByProcedure <- prop.table(table(peopleByProcedure$PROCEDIMIENTO), NULL)*100
 percentageByProcedureArray <- c(percentageByProcedure[1],percentageByProcedure[2],percentageByProcedure[3])
 pie3D(percentageByProcedureArray, main = "Percentage by procedure",
-      labels = c(paste("Angioplastia", round(percentageByProcedure[1],digits=2),"%"), paste("Surgery", round(percentageByProcedure[2],digits=2),"%"), paste("Endovalvula", round(percentageByProcedure[3],digits=2),"%")),
+      labels = c(paste("Angioplasty", round(percentageByProcedure[1],digits=2),"%"), paste("Surgery", round(percentageByProcedure[2],digits=2),"%"), paste("Endovalve", round(percentageByProcedure[3],digits=2),"%")),
       theta = 1,
       explode = 0.00)
 
@@ -146,16 +146,16 @@ dialisis7 <- c(percentageOfAngioplastyInDialisis*100,percentageOfSurgeryInDialis
 epoc7 <- c(percentageOfAngioplastyInEpoc*100,percentageOfSurgeryInEpoc*100)
 obesity7<-c(percentageOfAngioplastyInObesity*100,percentageOfSurgeryInObesity*100)
 
-diabetesBar <- barplot(diabetes7,ylab="percentage of patients with diabetes who go to each procedure" , names=c("Angioplasty","Surgery"),col = c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6)),ylim=c(0,100))
+diabetesBar <- barplot(diabetes7,ylab="Percentage of patients with diabetes who go to each procedure" , names=c("Angioplasty","Surgery"),col = c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6)),ylim=c(0,100))
 text(diabetesBar, labels=paste("%", c(round(diabetes7,2))), y=diabetes7+5)
 
-dialisisBar <- barplot(dialisis7,ylab="percentage of patients with dialisis who go to each procedure" , names=c("Angioplasty","Surgery"),col = c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6)),ylim=c(0,100))
+dialisisBar <- barplot(dialisis7,ylab="Percentage of patients with dialisis who go to each procedure" , names=c("Angioplasty","Surgery"),col = c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6)),ylim=c(0,100))
 text(dialisisBar, labels=paste("%", c(round(dialisis7,2))), y=dialisis7+5)
 
-epocBar <- barplot(epoc7,ylab="percentage of patients with epoc who go to each procedure" , names=c("Angioplasty","Surgery"),col = c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6)),ylim=c(0,100))
+epocBar <- barplot(epoc7,ylab="Percentage of patients with epoc who go to each procedure" , names=c("Angioplasty","Surgery"),col = c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6)),ylim=c(0,100))
 text(epocBar, labels=paste("%", c(round(epoc7,2))), y=epoc7+5)
 
-obesityBar <- barplot(obesity7,ylab="percentage of patients with morbid obesity who go to each procedure" , names=c("Angioplasty","Surgery"),col = c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6)),ylim=c(0,100))
+obesityBar <- barplot(obesity7,ylab="Percentage of patients with morbid obesity who go to each procedure" , names=c("Angioplasty","Surgery"),col = c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6)),ylim=c(0,100))
 text(obesityBar, labels=paste("%", c(round(obesity7,2))), y=obesity7+5)
 
 
