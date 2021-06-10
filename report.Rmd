@@ -19,8 +19,8 @@ library(tidyr)
 # Analysis
 In this section, we are going to analyze the different factors and variables that may be used to take into account in the predictor
 
-## 1. Average age for COPD obesity diabetes and dialysis
-```{r,echo = FALSE, message = FALSE, warning = FALSE}
+## Average age for COPD obesity diabetes and dialysis
+```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=14}
 epoc <- dataset[which(dataset$EPOC == 1),]
 ageAverageWithEpoc <- mean(epoc$EDAD)
 ageAverageWithEpoc <- round(ageAverageWithEpoc, 1)
@@ -43,7 +43,7 @@ riskFactors <- riskFactors[,c(2,17:20)]
 riskFactors$EPOC <- factor(riskFactors$EPOC, levels = c(0,1), labels = c(0, "EPOC"))
 riskFactors$DIABETES <- factor(riskFactors$DIABETES, levels = c(0,1), labels = c(0, "DIABETES"))
 riskFactors$DIALISIS <- factor(riskFactors$DIALISIS, levels = c(0,1), labels = c(0, "DIALISIS"))
-riskFactors$OBESIDAD.MORBIDA <- factor(riskFactors$OBESIDAD.MORBIDA, levels = c(0,1), labels = c(0, "MORBID OBESITY"))
+riskFactors$OBESIDAD.MORBIDA <- factor(riskFactors$OBESIDAD.MORBIDA, levels = c(0,1), labels = c(0, "OBESIDAD.MORBIDA"))
 riskFactors <- na_if(riskFactors,0)
 riskFactors <- mutate(riskFactors, factors = paste(riskFactors$EPOC,riskFactors$DIABETES,riskFactors$DIALISIS,riskFactors$OBESIDAD.MORBIDA, sep = " & "))
 riskFactors$factors <- gsub(" & NA" , "",riskFactors$factors)
@@ -52,13 +52,16 @@ riskFactors$factors <- gsub(" & NA & ","", riskFactors$factors)
 riskFactors <- riskFactors[which(riskFactors$factors != "EPOC & DIABETES"),]
 
 ggplot(riskFactors, aes(x = EDAD, fill = riskFactors$factors)) +
+  xlab("AGE")+
+  ylab("")+
   geom_density(alpha = 0.4) +
   scale_fill_discrete(name = "Factors") +
   theme(legend.position = "top")
+
 ```
 
-## 2. Percentage of Men and Women and age distribution for each one
-```{r,echo = FALSE, message = FALSE, warning = FALSE}
+## Percentage of Men and Women and age distribution for each one
+```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=14}
 numOfMale <- length(dataset$SEXO[which(dataset$SEXO == "MASC")])
 numOfFemale <- length(dataset$SEXO[which(dataset$SEXO == "FEME")])
 totalNum <- numOfFemale + numOfMale
@@ -67,7 +70,7 @@ percentageOfFemale <- round(numOfFemale / totalNum * 100, 2)
 percentages <- c(percentageOfFemale,percentageOfMale)
 
 #Pie
-pie3D(percentages,main = "Men and women percentage", labels = c(paste("Women", percentageOfFemale,"%"), paste("Men", percentageOfMale,"%")), theta = 1, explode = 0.00)
+pie(percentages,main = "Men and women percentage", labels = c(paste("Women", percentageOfFemale,"%"), paste("Men", percentageOfMale,"%")), theta = 1, explode = 0.00, col = c("pink","light blue"))
 
 
 ageAverageInMen <- mean(dataset[which(dataset$SEXO == "MASC"),]$EDAD)
@@ -87,36 +90,36 @@ ggplot(dataset, aes(x = EDAD, fill = SEXO)) +
 
 ```
 
-## 3. Percentage of people who go for angioplasty, surgery or endovalvula 
-```{r,echo = FALSE, message = FALSE, warning = FALSE}
+## Percentage of people who go for angioplasty, surgery or endovalvula 
+```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=14}
 peopleByProcedure <- dataset[which(dataset$PROCEDIMIENTO != "CIRUGIA, ENDOVALVULA"),] 
 percentageByProcedure <- prop.table(table(peopleByProcedure$PROCEDIMIENTO), NULL)*100
 percentageByProcedureArray <- c(percentageByProcedure[1],percentageByProcedure[2],percentageByProcedure[3])
-pie3D(percentageByProcedureArray, main = "Percentage by procedure",
+pie(percentageByProcedureArray, main = "Percentage by procedure",
       labels = c(paste("Angioplasty", round(percentageByProcedure[1],digits=2),"%"), paste("Surgery", round(percentageByProcedure[2],digits=2),"%"), paste("Endovalve", round(percentageByProcedure[3],digits=2),"%")),
       theta = 1,
-      explode = 0.00)
+      explode = 0.00, col = c("pink","light blue", "light green"))
 
 ```
 
-## 4.
-```{r,echo = FALSE, message = FALSE, warning = FALSE}
+# Interpretation
+We interpretate the graphs with crossed variables
 
-```
-
-## 5. {.tabset .unnumbered}
+## Number of pacients with factors of risk {.tabset .unnumbered}
 
 ### Male {- .unnumbered}
-![](./venn_diagramm.png)
+<center>
+  ![](./venn_diagramm.png)
+  </center>
 
 ### Female {- .unnumbered}
-![](./venn_diagramm2.png)
-```{r,echo = FALSE, message = FALSE, warning = FALSE}
+<center>
+  ![](./venn_diagramm2.png)
+</center>
 
-```
 
-## 6.
-```{r,echo = FALSE, message = FALSE, warning = FALSE}
+## Number of pacients going to each procedure by age range
+```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=14}
 surgery <- dataset[which(dataset$PROCEDIMIENTO == 'CIRUGIA'),]
 ageAverageInSurgery <- mean(surgery$EDAD)
 
@@ -148,11 +151,12 @@ ggplot(data, aes(fill=PROCEDURES, y=AMOUNT, x=AGES)) +
   geom_bar(position="dodge", stat="identity") +
   scale_fill_brewer(palette = "BuGn", type = "div", direction = -1) +
   theme_bw()
-
 ```
 
-## 7. Percentage of risk and no risk per procedure (without endovalvula)
-```{r,echo = FALSE, message = FALSE, warning = FALSE}
+
+
+## Percentage of risk and no risk per procedure (without endovalvula)
+```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=14}
 diabetesAndSurgery <- diabetes[which(diabetes$PROCEDIMIENTO == 'CIRUGIA'),]
 diabetesAndAngioplasty <- diabetes[which(diabetes$PROCEDIMIENTO == 'ANGIOPLASTIA'),]
 
@@ -198,10 +202,16 @@ text(obesityBar, labels=paste("%", c(round(obesity7,2))), y=obesity7+5)
 
 ```
 
-## 8.
-```{r,echo = FALSE, message = FALSE, warning = FALSE}
+# Team
 
-```
+## Ignacio Fernandez Battolla
 
-# Interpretation
-We interpretate the graphs and put more y data ...
+## Ignacio Chalub
+
+## Segundo Marcaida
+
+## Mateo Valle
+
+## Federico Pochat
+
+
