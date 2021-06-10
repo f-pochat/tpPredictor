@@ -19,7 +19,7 @@ library(tidyr)
 # Analysis
 In this section, we are going to analyze the different factors and variables that may be used to take into account in the predictor
 
-## Average age for COPD obesity diabetes and dialysis
+## Age for COPD, Obesity, Diabetes and Dialysis
 ```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=14}
 epoc <- dataset[which(dataset$EPOC == 1),]
 ageAverageWithEpoc <- mean(epoc$EDAD)
@@ -49,7 +49,7 @@ riskFactors <- mutate(riskFactors, factors = paste(riskFactors$EPOC,riskFactors$
 riskFactors$factors <- gsub(" & NA" , "",riskFactors$factors)
 riskFactors$factors <- gsub("NA &" , "",riskFactors$factors)
 riskFactors$factors <- gsub(" & NA & ","", riskFactors$factors)
-riskFactors <- riskFactors[which(riskFactors$factors != "EPOC & DIABETES"),]
+riskFactors <- riskFactors[which(riskFactors$factors =="EPOC" | riskFactors$factors ==" DIABETES" | riskFactors$factors ==" DIALISIS" | riskFactors$factors ==" OBESIDAD.MORBIDA"),]
 
 ggplot(riskFactors, aes(x = EDAD, fill = riskFactors$factors)) +
   xlab("AGE")+
@@ -79,14 +79,19 @@ ageAverageInWomen <- mean(dataset[which(dataset$SEXO == "FEME"),]$EDAD)
 ages <- c(dataset[which(dataset$SEXO == "MASC"),]$EDAD,dataset[which(dataset$SEXO == "FEME"),]$EDAD)
 
 #Histograma
-ggplot(dataset, aes(x = EDAD, fill = SEXO)) +
+g <- ggplot(dataset, aes(x = EDAD, fill = SEXO)) +
   geom_density(alpha = 0.4) +
   scale_fill_discrete(name = "Gender", labels = c("Female","Male")) +
+  xlab("Age")+
+  ylab(" ")+
   theme(legend.position = "top")+
-  geom_vline(data=dataset, aes(xintercept=ageAverageInMen, color = "Men"),
+  geom_vline(data=dataset, aes(xintercept=ageAverageInMen, color = "Male"),
                linetype="dashed")+
-  geom_vline(data=dataset, aes(xintercept=ageAverageInWomen, color = "Women"),
+  geom_vline(data=dataset, aes(xintercept=ageAverageInWomen, color = "Female"),
              linetype="dashed")
+
+g <- g+annotate(x=ageAverageInMen + 1,y=0.028,label=round(ageAverageInMen,2),vjust=2,geom="label")
+g+annotate(x=ageAverageInWomen -1,y=0.025,label=round(ageAverageInWomen,2),vjust=2,geom="label")
 
 ```
 
