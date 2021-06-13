@@ -6,6 +6,8 @@ library(dplyr)
 library(tidyr)
 library(viridis)
 library(tibble)
+library(plotly)
+library(gganimate)
 library(VennDiagram)
 library(RColorBrewer)
 library("ggVennDiagram")
@@ -41,8 +43,13 @@ riskFactors$factors <- gsub(" & NA" , "",riskFactors$factors)
 riskFactors$factors <- gsub("NA &" , "",riskFactors$factors)
 riskFactors$factors <- gsub(" & NA & ","", riskFactors$factors)
 riskFactors <- riskFactors[which(riskFactors$factors != "EPOC & DIABETES"),]
+riskFactors <- riskFactors[which(riskFactors$factors != " DIABETES & OBESIDAD.MORBIDA"),]
+riskFactors <- riskFactors[which(riskFactors$factors != "EPOC & DIABETES & OBESIDAD.MORBIDA"),]
+riskFactors <- riskFactors[which(riskFactors$factors != "EPOC & OBESIDAD.MORBIDA"),]
 
-ggplot(riskFactors, aes(x = EDAD, fill = riskFactors$factors)) +
+View(riskFactors)
+
+ggplot(riskFactors, aes(x = EDAD, fill = factors)) +
   geom_density(alpha = 0.4) +
   scale_fill_discrete(name = "Factors") +
   theme(legend.position = "top")
@@ -65,7 +72,7 @@ ageAverageInWomen <- mean(dataset[which(dataset$SEXO == "FEME"),]$EDAD)
 ages <- c(dataset[which(dataset$SEXO == "MASC"),]$EDAD,dataset[which(dataset$SEXO == "FEME"),]$EDAD)
 
 #Histograma
-ggplot(dataset, aes(x = EDAD, fill = SEXO)) +
+p <- ggplot(dataset, aes(x = EDAD, fill = SEXO)) +
   geom_density(alpha = 0.4) +
   scale_fill_discrete(name = "Gender", labels = c("Female","Male")) +
   theme(legend.position = "top")+
@@ -74,6 +81,8 @@ ggplot(dataset, aes(x = EDAD, fill = SEXO)) +
   geom_vline(data=dataset, aes(xintercept=ageAverageInWomen, color = "Mujeres"),
              linetype="dashed")
 
+p <- ggplotly(p)
+p
 #3 Porcentaje de personas que van a angioplastia, cirugia o endovalvula
 peopleByProcedure <- dataset[which(dataset$PROCEDIMIENTO != "CIRUGIA, ENDOVALVULA"),] 
 percentageByProcedure <- prop.table(table(peopleByProcedure$PROCEDIMIENTO), NULL)*100
@@ -137,7 +146,7 @@ percentageOfWomenWithDiabetes <- round(percentageOfWomenWithDiabetes,1)
 
 #Venn
 
-myCol <- brewer.pal(3, "Paired")
+myCol <- c("#dbe2ef","#3f72af","#112d4e")
 
 # Chart
 venn.diagram(
@@ -175,13 +184,11 @@ venn.diagram(
   cat.fontfamily = "sans",
   rotation = 1
 )
-
 venn.diagram(
   x = list(
     DIABETES = dataset$ï..[which(dataset$DIABETES == 1 & dataset$SEXO == "FEME")],
-    OBESITY = dataset$ï..[which(dataset$OBESIDAD.MORBIDA == 1 & dataset$SEXO == "FEME")],
-    EPOC = dataset$ï..[which(dataset$EPOC == 1 & dataset$SEXO == "FEME")]),
-  category.names = c("DIABETES" , "OBESITY" , "EPOC"),
+    OBESITY = dataset$ï..[which(dataset$OBESIDAD.MORBIDA == 1 & dataset$SEXO == "FEME")],),
+  category.names = c("DIABETES" , "OBESITY"),
   filename = 'venn_diagramm2.png',
   output=TRUE,
   
