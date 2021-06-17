@@ -396,4 +396,52 @@ pie3D(lateComplicationsEndovalve, main = "Complicaciones tardias endovalvula",
       explode = 0.00)
 
 
+#8 NUEVA
+# un pie con angioplastia que divida entre los motivos de ingreso
+# un pie con cirugia que divida entre los motivos de ingreso
+
+
+#prog coronaria -> angioplatia la mayoria y aveces cirugia
+#prog  valv -> Siempre cirugia
+#prog tavi -> endovalvula siempre
+#sca no sst
+
+angioplastyPatients <- dataset[which(dataset$PROCEDIMIENTO == "ANGIOPLASTIA"),]
+angioplastyCoronaryNumber <- length(angioplastyPatients$MOTIVO.DE.INGRESO[which(angioplastyPatients$MOTIVO.DE.INGRESO == "PROG CORONARIO")])
+#Todos los de angioplastia vienen de prog coronario
+
+surgeryPatients <- dataset[which(dataset$PROCEDIMIENTO == "CIRUGIA"), ]
+surgeryCoronaryNumber <- length(surgeryPatients$MOTIVO.DE.INGRESO[which(surgeryPatients$MOTIVO.DE.INGRESO == "PROG CORONARIO")])
+surgeryValvNumber <- length(surgeryPatients$MOTIVO.DE.INGRESO[which(surgeryPatients$MOTIVO.DE.INGRESO == "PROG VALV")])
+surgerySCANumber <- length(surgeryPatients$MOTIVO.DE.INGRESO[which(surgeryPatients$MOTIVO.DE.INGRESO == "SCA no SST")])
+surgeryOther <- length(surgeryPatients$MOTIVO.DE.INGRESO[which(surgeryPatients$MOTIVO.DE.INGRESO != "PROG CORONARIO" & surgeryPatients$MOTIVO.DE.INGRESO != "PROG VALV" & surgeryPatients$MOTIVO.DE.INGRESO != "SCA no SST")])
+totalNumSurgery <- surgeryCoronaryNumber + surgeryValvNumber + surgerySCANumber + surgeryOther
+
+percentageOfSurgeryCoronary <- round(surgeryCoronaryNumber / totalNumSurgery * 100, 2)
+percentageOfSurgeryValv <- round(surgeryValvNumber / totalNumSurgery * 100, 2)
+percentageOfSurgerySCA <- round(surgerySCANumber / totalNumSurgery * 100, 2)
+percentageOfSurgeryOther <- round(surgeryOther / totalNumSurgery * 100, 2)
+percentagesSurgery <- c(percentageOfSurgeryCoronary, percentageOfSurgeryValv, percentageOfSurgerySCA, percentageOfSurgeryOther)
+
+#Pie surgery
+progsAngioplasty <- c("Prog coronaria", "Prog valv", "SCA no SST", "Other")
+dataSurgery <- data.frame(progsAngioplasty, percentagesSurgery)
+colors <- c('rgb(219, 226, 239))', 'rgb(63, 114, 175))')
+fig <- plot_ly(data = df, labels = ~progsAngioplasty, values = ~percentagesSurgery, type = 'pie',marker = list(colors = colors))
+fig <- fig %>% layout(
+  xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+  yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+
+
+#Pie
+progsAngioplasty <- c("Prog coronaria", "Prog valv", "Prog tavi", "SCA no SST", "Other")
+df <- data.frame(sex,percentages)
+colors <- c('rgb(219, 226, 239))', 'rgb(63, 114, 175))')
+fig <- plot_ly(data = df, labels = ~sex, values = ~percentages, type = 'pie',marker = list(colors = colors))
+fig <- fig %>% layout(
+  xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+  yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+
 
