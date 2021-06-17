@@ -149,6 +149,8 @@ fig
 
 ## Percentage of reasons of admission per procedure
 ```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=8, fig.height=10}
+
+#For Angioplasty
 angioplastyPatients <- dataset[which(dataset$PROCEDIMIENTO == "ANGIOPLASTIA"),]
 angioplastyCoronaryNumber <- length(angioplastyPatients$MOTIVO.DE.INGRESO[which(angioplastyPatients$MOTIVO.DE.INGRESO == "PROG CORONARIO")])
 angioplastyValvNumber <- length(angioplastyPatients$MOTIVO.DE.INGRESO[which(angioplastyPatients$MOTIVO.DE.INGRESO == "PROG VALV")])
@@ -156,22 +158,26 @@ angioplastySCANumber <- length(angioplastyPatients$MOTIVO.DE.INGRESO[which(angio
 angioplastyOther <- length(angioplastyPatients$MOTIVO.DE.INGRESO[which(angioplastyPatients$MOTIVO.DE.INGRESO != "PROG CORONARIO" & angioplastyPatients$MOTIVO.DE.INGRESO != "PROG VALV" & angioplastyPatients$MOTIVO.DE.INGRESO != "SCA no SST")])
 totalNumAngioplasty <- angioplastyCoronaryNumber + angioplastyValvNumber + angioplastySCANumber + angioplastyOther
 
-percentageOfAngioplastyCoronary <- round(angioplastyCoronaryNumber / totalNumSurgery * 100, 2)
-percentageOfAngioplastyValv <- round(angioplastyValvNumber / totalNumSurgery * 100, 2)
-percentageOfAngioplastySCA <- round(angioplastySCANumber / totalNumSurgery * 100, 2)
-percentageOfAngioplastyOther <- round(angioplastyOther / totalNumSurgery * 100, 2)
+percentageOfAngioplastyCoronary <- round(angioplastyCoronaryNumber / totalNumAngioplasty * 100, 2)
+percentageOfAngioplastyValv <- round(angioplastyValvNumber / totalNumAngioplasty * 100, 2)
+percentageOfAngioplastySCA <- round(angioplastySCANumber / totalNumAngioplasty * 100, 2)
+percentageOfAngioplastyOther <- round(angioplastyOther / totalNumAngioplasty * 100, 2)
 percentagesAngioplasty <- c(percentageOfAngioplastyValv, percentageOfAngioplastyCoronary, percentageOfAngioplastySCA, percentageOfAngioplastyOther )
 
 #Pie angioplasty
 progsAngioplasty <- c("Prog valv", "Prog coronaria", "SCA no SST","Other")
 dataAngioplasty <- data.frame(progsAngioplasty, percentagesAngioplasty)
-colors <- c('rgb(219, 226, 239))', 'rgb(63, 114, 175))')
+colors <- c("#dbe2ef","#3f72af","#f9f7f7","#112d4e")
 fig1 <- plot_ly(data = dataAngioplasty, labels = ~progsAngioplasty, values = ~percentagesAngioplasty, type = 'pie',marker = list(colors = colors))
 fig1 <- fig1 %>% layout(
   xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
   yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 fig1
 
+```
+
+```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=8, fig.height=10}
+#For Surgery
 surgeryPatients <- dataset[which(dataset$PROCEDIMIENTO == "CIRUGIA"), ]
 surgeryCoronaryNumber <- length(surgeryPatients$MOTIVO.DE.INGRESO[which(surgeryPatients$MOTIVO.DE.INGRESO == "PROG CORONARIO")])
 surgeryValvNumber <- length(surgeryPatients$MOTIVO.DE.INGRESO[which(surgeryPatients$MOTIVO.DE.INGRESO == "PROG VALV")])
@@ -187,14 +193,13 @@ percentagesSurgery <- c(percentageOfSurgeryCoronary, percentageOfSurgeryValv, pe
 #Pie surgery
 progsSurgery <- c("Prog coronaria", "Prog valv", "Other")
 dataSurgery <- data.frame(progsSurgery, percentagesSurgery)
-colors <- c('rgb(219, 226, 239))', 'rgb(63, 114, 175))')
+colors <- c("#dbe2ef","#3f72af","#f9f7f7","#112d4e")
 fig2 <- plot_ly(data = dataSurgery, labels = ~progsSurgery, values = ~percentagesSurgery, type = 'pie',marker = list(colors = colors))
 fig2 <- fig2 %>% layout(
   xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
   yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 fig2
 ```
-
 # Interpretation
 We interpretate the graphs with crossed variables
 
