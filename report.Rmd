@@ -151,7 +151,7 @@ fig
 With this easy-reading pie chart, we can see how more often angioplaties are. However, surgeries are also very common as we can see.
 
 ## Percentage of reasons of admission per procedure
-
+With these two graphs we see how important is the reason of admission and see how the majority went with a programmed date.
 
 ```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=8, fig.height=10}
 
