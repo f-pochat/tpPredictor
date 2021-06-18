@@ -187,8 +187,9 @@ venn.diagram(
 venn.diagram(
   x = list(
     DIABETES = dataset$ï..[which(dataset$DIABETES == 1 & dataset$SEXO == "FEME")],
-    OBESITY = dataset$ï..[which(dataset$OBESIDAD.MORBIDA == 1 & dataset$SEXO == "FEME")],),
-  category.names = c("DIABETES" , "OBESITY"),
+    OBESITY = dataset$ï..[which(dataset$OBESIDAD.MORBIDA == 1 & dataset$SEXO == "FEME")],
+    EPOC = dataset$ï..[which(dataset$EPOC == 1 & dataset$SEXO == "FEME")]),
+  category.names = c("DIABETES" , "OBESITY","COPD"),
   filename = 'venn_diagramm2.png',
   output=TRUE,
   

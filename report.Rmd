@@ -170,7 +170,7 @@ percentageOfAngioplastyOther <- round(angioplastyOther / totalNumAngioplasty * 1
 percentagesAngioplasty <- c(percentageOfAngioplastyValv, percentageOfAngioplastyCoronary, percentageOfAngioplastySCA, percentageOfAngioplastyOther )
 
 #Pie angioplasty
-progsAngioplasty <- c("Prog valv", "Prog coronaria", "SCA no SST","Other")
+progsAngioplasty <- c("Programmed Valve", "Programmed Coronary", "Not urgent SCA Symptomps","Other")
 dataAngioplasty <- data.frame(progsAngioplasty, percentagesAngioplasty)
 colors <- c("#dbe2ef","#3f72af","#f9f7f7","#112d4e")
 fig1 <- plot_ly(data = dataAngioplasty, labels = ~progsAngioplasty, values = ~percentagesAngioplasty, type = 'pie',marker = list(colors = colors))
@@ -196,7 +196,7 @@ percentageOfSurgeryOther <- round(surgeryOther / totalNumSurgery * 100, 2)
 percentagesSurgery <- c(percentageOfSurgeryCoronary, percentageOfSurgeryValv, percentageOfSurgeryOther)
 
 #Pie surgery
-progsSurgery <- c("Prog coronaria", "Prog valv", "Other")
+progsSurgery <- c("Programmed Coronary", "Programmed Valve", "Other")
 dataSurgery <- data.frame(progsSurgery, percentagesSurgery)
 colors <- c("#dbe2ef","#3f72af","#f9f7f7","#112d4e")
 fig2 <- plot_ly(data = dataSurgery, labels = ~progsSurgery, values = ~percentagesSurgery, type = 'pie',marker = list(colors = colors))
