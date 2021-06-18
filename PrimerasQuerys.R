@@ -154,7 +154,7 @@ venn.diagram(
     DIABETES = dataset$ï..[which(dataset$DIABETES == 1 & dataset$SEXO == "MASC")],
     OBESITY = dataset$ï..[which(dataset$OBESIDAD.MORBIDA == 1 & dataset$SEXO == "MASC")],
     EPOC = dataset$ï..[which(dataset$EPOC == 1 & dataset$SEXO == "MASC")]),
-  category.names = c("DIABETES" , "OBESITY" , "EPOC"),
+  category.names = c("DIABETES" , "OBESITY" , "COPD"),
   filename = 'venn_diagramm.png',
   output=TRUE,
   
