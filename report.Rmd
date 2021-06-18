@@ -82,6 +82,7 @@ g
 ```
 
 ## Age for COPD, Obesity, Diabetes and Dialysis
+We found very useful to see the amount of pacients with risks factors regarding the age. Even though, age usually do not tend to be fundamental to leading to cardiac issues, unfortuantely it rises the probabability of getting other factors, such as COPD, obesity, daibetes or dialysis.
 
 ```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=8}
 epoc <- dataset[which(dataset$EPOC == 1),]
@@ -132,6 +133,7 @@ g2
 ```
 
 ## Percentage of people who go for angioplasty, surgery or endovalvula 
+This graph contains relevant information, to start analyizing the dataset with what we are going to predict: which proccedure a pacient with cardaic problems must go to.
 
 ```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=8, fig.height=10}
 peopleByProcedure <- dataset[which(dataset$PROCEDIMIENTO != "CIRUGIA, ENDOVALVULA"),] 
@@ -146,8 +148,11 @@ fig <- fig %>% layout(
          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 fig
 ```
+With this easy-reading pie chart, we can see how more often angioplaties are. However, surgeries are also very common as we can see.
 
 ## Percentage of reasons of admission per procedure
+
+
 ```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=8, fig.height=10}
 
 #For Angioplasty
@@ -201,9 +206,10 @@ fig2 <- fig2 %>% layout(
 fig2
 ```
 # Interpretation
-We interpretate the graphs with crossed variables
+We interpretate the dataser with graphs using multiple crossed variables.
 
 ## Number of pacients with factors of risk {.tabset .tabset-pills .unnumbered}
+Using two venn diagrams, we can easily check patiens with multiple risk factors, for example, six male patients suffer from obesity and diabetes. These type of graphs are very useful to see the preccedure chosen for each pacient and how multiple factors may affect the decision.
 
 ### Male {- .unnumbered}
 <center>
@@ -216,6 +222,8 @@ We interpretate the graphs with crossed variables
 </center>
 
 ## Number of pacients going to each procedure by age range
+Here is where things start to get interesting. We check how important is age as a variable. How much will we take it into account once we make the predictor.
+
 ```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=8}
 surgery <- dataset[which(dataset$PROCEDIMIENTO == 'CIRUGIA'),]
 ageAverageInSurgery <- mean(surgery$EDAD)
@@ -256,7 +264,7 @@ p
 
 
 ## Pacients with each factor going to each procedure
-
+Just like the previous graph, we see how important a variable is. In this case, the risk factors. We can see how the majority of pacients with diabetes go to angioplasty. However, the majority of obese pacient go to surgery. This is important information to take into account for the predictor
 ```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=8,fig.height = 6}
 diabetesAndSurgery <- diabetes[which(diabetes$PROCEDIMIENTO == 'CIRUGIA'),]
 diabetesAndAngioplasty <- diabetes[which(diabetes$PROCEDIMIENTO == 'ANGIOPLASTIA'),]
@@ -308,9 +316,13 @@ p4
 ```
 
 # Predictor
+Once we analyze and interpretate the given dataset,we selected the variables the we are going to use for the model. And these are: Age, risk factor and number of injuries.Then, we use 70% of the data to train our model, and then with the remaining 30% we use it to test how effective actually is.
+
+So, with the test partition, we show the results with a confussion matrix, where we contrast the predicted values and the actual values.
 ```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=8,fig.height = 6}
 library(randomForest)
 library(kableExtra)
+library(ROCR)
 ## 70% of the sample size
 smp_size <- floor(0.7 * nrow(dataset))
 
@@ -322,6 +334,7 @@ dataset3 <- subset(dataset,dataset$MOTIVO.DE.INGRESO == "PROG VALV" |
                      dataset$MOTIVO.DE.INGRESO == "PROGRAMADO TAVI")
 
 dataset2 <- subset(dataset3, dataset3$PROCEDIMIENTO != "CIRUGIA, ENDOVALVULA")
+dataset2 <- subset(dataset2, dataset2$PROCEDIMIENTO != "ENDOVALVULA")
 smp_size <- floor(0.7 * nrow(dataset2))
 
 ## set the seed to make your partition reproducible
@@ -343,7 +356,7 @@ dataset2$DIABETES <- as.factor(dataset2$DIABETES)
 dataset2$EPOC <- as.factor(dataset2$EPOC)
 dataset2$DIALISIS <- as.factor(dataset2$DIALISIS)
 dataset2$OBESIDAD.MORBIDA <- as.factor(dataset2$OBESIDAD.MORBIDA)
-set.seed(123) 
+set.seed(-123) 
 train_ind <- sample(seq_len(nrow(dataset2)), size = smp_size)
 
 train <- dataset2[train_ind, ]
@@ -354,12 +367,32 @@ modelo<-randomForest(PROCEDIMIENTO~EDAD+DIALISIS+MOTIVO.DE.INGRESO+OBESIDAD.MORB
 
 predictor<-predict(modelo,test,type = "class")
 table <-table(test$PROCEDIMIENTO,predictor)
+dimnames(table)=list(c("Angioplasty", "Surgery"), c("Angioplasty", "Surgery"))
 table %>%
   kbl() %>%
   kable_material(c("striped", "hover"))
-round(sum(diag(table))/sum(table)*100,2)
-
+#round(sum(diag(table))/sum(table)*100,2)
 ```
+
+Finally, with an AUROC we compare the true positive rate and the false positive rate. Here, we can confirm there is a low ratio of false positives.
+
+```{r,echo = FALSE, message = FALSE, warning = FALSE,fig.width=8,fig.height = 6}
+plotROC <- function(pred){
+  perf<- performance(pred,"tpr","fpr")
+  plot(perf)
+  AUC<-performance(pred,"auc")@y.values[[1]]
+  grid()
+  text(.6,.2,sprintf("AUC=%0.3f", AUC))
+  abline(0,1,col="red", lty = 2)
+}
+
+predaux<-prediction(as.numeric(predictor),test$PROCEDIMIENTO)
+
+perf <- performance(predaux,"auc")
+
+plotROC(predaux)
+```
+
 # Team
 
 ## Ignacio Fernandez Battolla
@@ -371,5 +404,4 @@ round(sum(diag(table))/sum(table)*100,2)
 ## Mateo Valle
 
 ## Federico Pochat
-
 
